@@ -86,7 +86,7 @@ def approximateJacobian(f, x, dx=1e-6):
     for i in range(x.size): # Could also have said range(x.size)
         h[i] = dx
         # Replace ith col of Df_x with difference quotient
-        Df_x[:,i] = f(x + h) - fx / dx
+        Df_x[:,i] = (f(x + h) - fx) / float(dx)
         # Reset h[i] to 0
         h[i] = 0
     # NOTE that there are more numpy-ish ways to iterate over the
