@@ -24,10 +24,9 @@ def approximateJacobian(f, x, dx=1e-6):
     length N, then Df_x is an NxN numpy matrix.
 
     """
-    # approximateJacobian is only actually < 15 lines.  I've added
-    # tons of explanatory comments for those who aren't well-versed in
-    # numpy. You may want to delete all these comments from the file
-    # once you get comfortable with what they say.
+    #dx must be positive and greater than zero
+    if dx <= 0:
+        raise ValueError('dx must be positive non-zero')
 
     # Evaluate f(x) up front, since we'll need this value in multiple
     # places
@@ -40,37 +39,12 @@ def approximateJacobian(f, x, dx=1e-6):
     if np.isscalar(x):
         return (f(x + 0.5*dx) - f(x - 0.5*dx)) / float(dx)
 
-    # From this point on, x must be a numpy array or numpy matrix, so
-    # Df_x will be returned as a numpy matrix. Let's initialize it as
-    # a matrix of zeros.
-
-    # The shape of a numpy array/matrix is represented as a tuple.
-    # Fun facts: (i) there are "array creation
-    # functions" like np.zeros or np.ones or np.empty that take as an
-    # argument a desired shape (i.e. a tuple) and then make an array
-    # with that shape (ii) every numpy array/matrix has a 'size'
-    # attribute that reports the number of distinct data elements in
-    # that array/matrix. So, e.g., the 1D array [1, 2, 3, 4, 5, 6] and
-    # the 2D array [[1, 2, 3], [4, 5, 6]] both have a size attribute
-    # equal to 6.
-
-    # Let's leverage these facts to initialize Df_x to be an NxN numpy
+    # For non-scalar case
+    # Let's initialize Df_x to be an NxN numpy
     # matrix of zeros:
     N = x.size
     Df_x = np.matrix(np.zeros((N,N)))
-    # Just as an FYI, but not relevant in the current module, two
-    # other fun facts: (iii) a standalone empty pair of parentheses ()
-    # represents an empty tuple, and a standalone pair of square
-    # brackets [] is an empty list (iv) concatenating empty
-    # tuples/lists just yields a single empty tuple/list. So () + () +
-    # () --> (), or [] * 4 --> [].
 
-    # np.zeros_like(blah) generates an object filled with zeros that's
-    # of the same type and shape as 'blah'.  So if x is an array, h
-    # below will be an array; if x is a matrix, h will be a matrix.
-    # This is good, b/c we'll be able to add x + h without issue, and
-    # it will be of the same shape/type as x (so that we can feed x +
-    # h into f without issue).
     h = np.zeros_like(x)
     # We allocate this "vector of zeros" just once (to be
     # memory-efficient). Below, we're going to iterate over the
@@ -91,9 +65,6 @@ def approximateJacobian(f, x, dx=1e-6):
         Df_x[:,i] = (f(x + 0.5*h) - (f(x - 0.5*h))) / float(dx)
         # Reset h[i] to 0
         h[i] = 0
-    # NOTE that there are more numpy-ish ways to iterate over the
-    # columns of a 2D array, but I thought this C-esque way would be
-    # most legible for n00bz
 
     return Df_x
 
