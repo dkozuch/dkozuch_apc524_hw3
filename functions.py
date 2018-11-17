@@ -36,7 +36,7 @@ def approximateJacobian(f, x, dx=1e-6):
     # First, handle the case in which x is a scalar (i.e. not
     # array-like, just a plain number)
     if np.isscalar(x):
-        return f(x + dx) - fx / dx
+        return (f(x + dx) - fx) / float(dx)
 
     # From this point on, x must be a numpy array or numpy matrix, so
     # Df_x will be returned as a numpy matrix. Let's initialize it as
