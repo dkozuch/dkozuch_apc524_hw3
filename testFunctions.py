@@ -62,6 +62,15 @@ class TestFunctions(unittest.TestCase):
         # array-specific assert statements found in numpy.testing
         npt.assert_array_almost_equal(Df_x, A)
 
+    def test_higherOrder(self):
+        #test higher order expressions
+       f = F.Polynomial([1,2,3,4])
+       x0 = 2
+       dx = 1.e-6
+       Df_x = F.approximateJacobian(f, x0, dx)
+       self.assertAlmostEqual(Df_x,2+(3*2*x0)+(4*3*(x0**2)))
+
+
     def test_Polynomial(self):
         # p(x) = x^2 + 5x + 4
         p = F.Polynomial([4, 5, 1])

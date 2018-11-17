@@ -35,8 +35,10 @@ def approximateJacobian(f, x, dx=1e-6):
 
     # First, handle the case in which x is a scalar (i.e. not
     # array-like, just a plain number)
+
+    #use symetric differentiation for higher numerical accuracy
     if np.isscalar(x):
-        return (f(x + dx) - fx) / float(dx)
+        return (f(x + 0.5*dx) - f(x - 0.5*dx)) / float(dx)
 
     # From this point on, x must be a numpy array or numpy matrix, so
     # Df_x will be returned as a numpy matrix. Let's initialize it as
@@ -86,7 +88,7 @@ def approximateJacobian(f, x, dx=1e-6):
     for i in range(x.size): # Could also have said range(x.size)
         h[i] = dx
         # Replace ith col of Df_x with difference quotient
-        Df_x[:,i] = (f(x + h) - fx) / float(dx)
+        Df_x[:,i] = (f(x + 0.5*h) - (f(x - 0.5*h))) / float(dx)
         # Reset h[i] to 0
         h[i] = 0
     # NOTE that there are more numpy-ish ways to iterate over the
