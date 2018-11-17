@@ -2,6 +2,7 @@
 
 import unittest
 import numpy as np
+import numpy.testing as npt
 
 import newton
 
@@ -36,6 +37,19 @@ class TestNewton(unittest.TestCase):
         x = solver.solve(-2.0) #-2.0 is the root
         self.assertEqual(x, -2.0)
 
+    def test_2D(self):
+        
+        A = np.matrix("1.0 2.0; 1.0 3.0")
+        B = np.matrix("-1.0; 3.0")
+        def f(x):
+            p1 = A*x
+            p2 = p1 + B
+            return p2
+
+        solver = newton.Newton(f, tol=1.e-15, maxiter=10)
+        x = solver.solve(np.matrix("2.0; 2.0"))
+        npt.assert_array_almost_equal(x,np.matrix("9.0; -4.0"))
+        
 
 if __name__ == "__main__":
     unittest.main()
