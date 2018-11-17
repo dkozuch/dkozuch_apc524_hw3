@@ -8,7 +8,7 @@ import newton
 
 class TestNewton(unittest.TestCase):
     
-    def testLinear(self):
+    def test_1D(self):
         # Just so you see it at least once, this is the lambda keyword
         # in Python, which allows you to create anonymous functions
         # "on the fly". As I commented in testFunctions.py, you can
@@ -49,7 +49,9 @@ class TestNewton(unittest.TestCase):
         solver = newton.Newton(f, tol=1.e-15, maxiter=10)
         x = solver.solve(np.matrix("2.0; 2.0"))
         npt.assert_array_almost_equal(x,np.matrix("9.0; -4.0"))
-        
+   
+    
+     
 
 if __name__ == "__main__":
     unittest.main()

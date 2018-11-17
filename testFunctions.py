@@ -62,6 +62,17 @@ class TestFunctions(unittest.TestCase):
         # array-specific assert statements found in numpy.testing
         npt.assert_array_almost_equal(Df_x, A)
 
+       
+        #test with a 3x3 array; shouldn't really be any different
+        A = np.matrix("3.0 1.0 2.0; 9.0 0.0 12.0; 16.5 23.0 1.2")
+        def f(x):
+            return A*x
+
+        x0 = np.matrix("5.0; 6.0; 17.2")
+        dx = 1.e-6
+        Df_x = F.approximateJacobian(f, x0, dx)
+        npt.assert_array_almost_equal(Df_x, A)
+
     def test_dxZero(self):
         #make sure approximateJacobian raises error if dx is <= 0
         f = F.Polynomial([1,2,3,4])
@@ -76,17 +87,6 @@ class TestFunctions(unittest.TestCase):
        dx = 1.e-6
        Df_x = F.approximateJacobian(f, x0, dx)
        self.assertAlmostEqual(Df_x,2+(3*2*x0)+(4*3*(x0**2)))
-
-    def test_higherDimmension(self):
-	#test higher dimmension functions
-        A = np.matrix("3.0 1.0 2.0; 9.0 0.0 12.0; 16.5 23.0 1.2")
-        def f(x):
-            return A*x
-        
-        x0 = np.matrix("5.0; 6.0; 17.2")
-        dx = 1.e-6
-        Df_x = F.approximateJacobian(f, x0, dx)
-        npt.assert_array_almost_equal(Df_x, A)
 
     def test_Polynomial(self):
         # p(x) = x^2 + 5x + 4
