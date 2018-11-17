@@ -6,6 +6,7 @@ Implementation of a Newton-Raphson root-finder.
 
 import numpy as np
 import functions as F
+import warnings
 
 class Newton(object):
     """Newton objects have a solve() method for finding roots of f(x)
@@ -48,7 +49,8 @@ class Newton(object):
             if np.linalg.norm(fx) < self._tol:
                 return x
             x = self.step(x, fx)
-
+            if i == self._maxiter - 1:
+                warnings.warn("Maximum iterations reached, but method has not converged to the requested tolerance",RuntimeWarning)
         return x
 
     def step(self, x, fx=None):
