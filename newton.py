@@ -14,7 +14,7 @@ class Newton(object):
 
 	"""
 	
-	def __init__(self, f, tol=1.e-6, maxiter=20, dx=1.e-6, max_radius=np.inf):
+	def __init__(self, f, tol=1.e-6, maxiter=1000, dx=1.e-6, max_radius=np.inf, Df=False):
 		"""Parameters:
 		
 		f: the function whose roots we seek. Can be scalar- or
@@ -27,6 +27,8 @@ class Newton(object):
 		dx: step size for computing approximate Jacobian
 		
 		max_radius: maximum euclidean distance to search from x0
+		
+		Df: function representing the Jacobian of f; if set to zero the method will numerically approximate the Jacobian
 
 		"""
 		self._f = f
@@ -34,6 +36,7 @@ class Newton(object):
 		self._maxiter = maxiter
 		self._dx = dx
 		self._max_radius = max_radius
+		self._Df = Df
 
 	def solve(self, x0):
 		"""Determine a solution of f(x) = 0, using Newton's method, starting
@@ -65,7 +68,13 @@ class Newton(object):
 		if fx is None:
 			fx = self._f(x)
 
-		Df_x = F.approximateJacobian(self._f, x, self._dx)
+		#allow the user to provide the functional form of the Jacobian as Df; if Df is set to zero, we approximate numerically
+		#because Df could be a scalar or a matrix, we have to test isscalar first
+		if (np.isscalar(self._Df) and self._Df == 0) or (not np.isscalar(self._Df) and not np.any(self._Df)):
+			Df_x = F.approximateJacobian(self._f, x, self._dx)
+		else:
+			Df_x = self._Df(x)
+		
 		#check for zero slope
 		if np.sum(Df_x) == 0:
 			raise ValueError('Algorithm encountered point with zero slope. Maybe try a different intial condition?')

@@ -87,6 +87,28 @@ class TestNewton(unittest.TestCase):
 		x = solver.solve(np.matrix("2.0; 2.0"))
 		npt.assert_array_almost_equal(x,np.matrix("9.0; -4.0"))
 		
+	def test_analyticJacobian(self):
+		
+		#test 1D analytic jacobian
+		f = lambda x : x**2 - 400
+		Df = lambda x: 2*x
+		solver = newton.Newton(f, Df=Df)
+		x = solver.solve(2.0)
+		self.assertAlmostEqual(x,20.0)
+		
+		#test 2D analytic jacobian
+		A = np.matrix("1.0 2.0; 1.0 3.0")
+		B = np.matrix("-1.0; 3.0")
+		def f(x):
+			return A*x + B
+		def Df(x):
+			return A
+		
+		solver = newton.Newton(f, Df=Df)
+		x = solver.solve(np.matrix("2.0; 2.0"))
+		npt.assert_array_almost_equal(x,np.matrix("9.0; -4.0"))
+		
+		
 if __name__ == "__main__":
 	unittest.main()
 
