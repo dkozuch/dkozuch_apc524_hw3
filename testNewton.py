@@ -66,7 +66,27 @@ class TestNewton(unittest.TestCase):
 		solver = newton.Newton(f, tol=1.e-15, maxiter=3) #choose small number of maxiter
 		with self.assertWarns(RuntimeWarning):
 			solver.solve(np.matrix("200.0; 200.0"))
+			
+	def test_max_radius(self):
+		#make sure a ValueError raised if maxr is exceeded
+		A = np.matrix("1.0 2.0; 1.0 3.0")
+		B = np.matrix("-1.0; 3.0")
+		def f(x):
+			return A*x + B
 
+		solver = newton.Newton(f, tol=1.e-15, maxiter=1000, max_radius=10) #choose small number for maxr
+		self.assertRaises(ValueError,solver.solve,np.matrix("200.0; 200.0"))
+		
+		#make sure correct answer returned if maxr is increased appropriately
+		A = np.matrix("1.0 2.0; 1.0 3.0")
+		B = np.matrix("-1.0; 3.0")
+		def f(x):
+			return A*x + B
+
+		solver = newton.Newton(f, tol=1.e-15, maxiter=1000, max_radius=100) #choose small number for maxr
+		x = solver.solve(np.matrix("2.0; 2.0"))
+		npt.assert_array_almost_equal(x,np.matrix("9.0; -4.0"))
+		
 if __name__ == "__main__":
 	unittest.main()
 

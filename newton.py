@@ -14,7 +14,7 @@ class Newton(object):
 
 	"""
 	
-	def __init__(self, f, tol=1.e-6, maxiter=20, dx=1.e-6, maxr=1000):
+	def __init__(self, f, tol=1.e-6, maxiter=20, dx=1.e-6, max_radius=np.inf):
 		"""Parameters:
 		
 		f: the function whose roots we seek. Can be scalar- or
@@ -25,12 +25,15 @@ class Newton(object):
 		perform maxiter iterations, whichever happens first
 
 		dx: step size for computing approximate Jacobian
+		
+		max_radius: maximum euclidean distance to search from x0
 
 		"""
 		self._f = f
 		self._tol = tol
 		self._maxiter = maxiter
 		self._dx = dx
+		self._max_radius = max_radius
 
 	def solve(self, x0):
 		"""Determine a solution of f(x) = 0, using Newton's method, starting
@@ -39,9 +42,6 @@ class Newton(object):
 		numpy array.
 
 		"""
-		# NOTE: no need to check whether x0 is scalar or vector. All
-		# the functions/methods invoked inside solve() return "the
-		# right thing" when x0 is scalar.
 		x = x0
 		for i in range(self._maxiter):
 			fx = self._f(x)
@@ -49,6 +49,9 @@ class Newton(object):
 			if np.linalg.norm(fx) < self._tol:
 				return x
 			x = self.step(x, fx)
+			
+			if np.abs(np.linalg.norm(x-x0)) > self._max_radius:
+				raise ValueError('The algorithm made a step that exceeded the specified maximum radius (maxr = '+str(self._max_radius)+'). Either specify a different maxr or different intial condition.') 
 			
 			if i == self._maxiter - 1:
 				warnings.warn('Maximum iterations reached, but method has not converged to the requested tolerance',RuntimeWarning)
@@ -67,16 +70,8 @@ class Newton(object):
 		if np.sum(Df_x) == 0:
 			raise ValueError('Algorithm encountered point with zero slope. Maybe try a different intial condition?')
 
-		# linalg.solve(A,B) returns the matrix solution to AX = B, so
-		# it gives (A^{-1}) B. np.matrix() promotes scalars to 1x1
-		# matrices.
 		h = np.linalg.solve(np.matrix(Df_x), np.matrix(fx))
-		# Suppose x was a scalar. At this point, h is a 1x1 matrix. If
-		# we want to return a scalar value for our next guess, we need
-		# to re-scalarize h before combining it with our previous
-		# x. The function np.asscalar() will act on a numpy array or
-		# matrix that has only a single data element inside and return
-		# that element as a scalar.
+		
 		if np.isscalar(x):
 			h = np.asscalar(h)
 
