@@ -1,0 +1,44 @@
+
+README for method: newton.py
+
+BACKGROUND: newton.py contains the class Newton which can be used to find the roots of N-dimensional functions. It has a single non-standard dependency, functions.py, which contains a function for approximating the Jacobian of a function and a function for writing polynomials
+
+DESCRIPTION: the Newton class contains three functions:
+
+	-- Newton.__init__
+	This function initalizes the class and requires one argument, f, the function for which the roots will be solved
+	Optional arguments tol, maxiter, dx, max_radius, and Df are described in file
+
+	-- Newton.solve
+	This function takes one argument, x0, as the intial guess for the solver
+
+	-- Newton.step
+	Newton.solve requires this function for iterative updates accoding to Newton's method
+
+USE: This example (below) demos how the newton.py can be used as a module to solve for the roots of a simple function, f(x)
+
+#############################################################################
+# Example script
+
+#make sure newton.py and functions.py are in the working directory
+#then import the module
+import newton
+
+#define a simple function f
+def f(x):
+        return 5*x - 10
+
+#instantiate the solver
+solver = newton.Newton(f)
+
+#solve for the root
+root = solver.solve(25.0)
+
+#print the answer
+print(root)
+###############################################################################
+	
+The above script should return an answer very close to the true root (2.0)
+
+
+

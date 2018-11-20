@@ -10,11 +10,11 @@ import warnings
 
 class Newton(object):
 	"""Newton objects have a solve() method for finding roots of f(x)
-	using Newton's method. x and f can both be vector-valued.
+	using Newton's method. x, f, and Df can all be vector-valued.
 
 	"""
 	
-	def __init__(self, f, tol=1.e-6, maxiter=1000, dx=1.e-6, max_radius=np.inf, Df=False):
+	def __init__(self, f, tol=1.e-6, maxiter=1000, dx=1.e-6, max_radius=np.inf, Df=0):
 		"""Parameters:
 		
 		f: the function whose roots we seek. Can be scalar- or
@@ -76,7 +76,6 @@ class Newton(object):
 			Df_x = self._Df(x)
 		
 		#check for zero slope
-                #a smarter algorithm would handle this, but we'll leave it to the user
 		if np.sum(Df_x) == 0:
 			raise ValueError('Algorithm encountered point with zero slope. Maybe try a different intial condition?')
 
