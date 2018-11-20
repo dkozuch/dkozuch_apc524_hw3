@@ -68,16 +68,16 @@ class TestNewton(unittest.TestCase):
 			solver.solve(np.matrix("200.0; 200.0"))
 			
 	def test_max_radius(self):
-		#make sure a ValueError raised if maxr is exceeded
+		#make sure a ValueError raised if max_radius is exceeded
 		A = np.matrix("1.0 2.0; 1.0 3.0")
 		B = np.matrix("-1.0; 3.0")
 		def f(x):
 			return A*x + B
 
-		solver = newton.Newton(f, tol=1.e-15, maxiter=1000, max_radius=10) #choose small number for maxr
+		solver = newton.Newton(f, tol=1.e-15, maxiter=1000, max_radius=10) #choose small number for max_radius
 		self.assertRaises(ValueError,solver.solve,np.matrix("200.0; 200.0"))
 		
-		#make sure correct answer returned if maxr is increased appropriately
+		#make sure correct answer returned if max_radius is increased appropriately
 		A = np.matrix("1.0 2.0; 1.0 3.0")
 		B = np.matrix("-1.0; 3.0")
 		def f(x):

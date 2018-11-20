@@ -54,7 +54,7 @@ class Newton(object):
 			x = self.step(x, fx)
 			
 			if np.abs(np.linalg.norm(x-x0)) > self._max_radius:
-				raise ValueError('The algorithm made a step that exceeded the specified maximum radius (maxr = '+str(self._max_radius)+'). Either specify a different maxr or different intial condition.') 
+				raise ValueError('The algorithm made a step that exceeded the specified maximum radius (max_radius = '+str(self._max_radius)+'). Try changing dx, max_radius, or your intial guess..') 
 			
 			if i == self._maxiter - 1:
 				warnings.warn('Maximum iterations reached, but method has not converged to the requested tolerance',RuntimeWarning)
@@ -76,6 +76,7 @@ class Newton(object):
 			Df_x = self._Df(x)
 		
 		#check for zero slope
+                #a smarter algorithm would handle this, but we'll leave it to the user
 		if np.sum(Df_x) == 0:
 			raise ValueError('Algorithm encountered point with zero slope. Maybe try a different intial condition?')
 
