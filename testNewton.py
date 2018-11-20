@@ -23,6 +23,17 @@ class TestNewton(unittest.TestCase):
 		x = solver.solve(2.0)
 		self.assertEqual(x, -2.0)
 
+		#test with integers instead of floats
+		f = lambda x : 3*x + 6
+		solver = newton.Newton(f, tol=1.e-15, maxiter=10)
+		x = solver.solve(2)
+		self.assertEqual(x, -2)
+
+		#test with intial condition returning infinity
+		f = lambda x : x + 10
+		solver = newton.Newton(f, tol=1.e-15, maxiter=1000)
+		self.assertRaises(ValueError,solver.solve,np.inf)
+
 		#test another 1D function, but has 2 roots
 		f = lambda x : (x**2) - 100
 		solver = newton.Newton(f, tol=1.e-15, maxiter=10)

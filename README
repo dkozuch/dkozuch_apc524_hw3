@@ -1,5 +1,9 @@
-
 README for method: newton.py
+
+IMPORTANT: 
+(1) This method is only tested for python version 3.6
+(2) This method uses the outdated numpy class matrix for administrative reasons; ignore related warnings
+(3) No gaurentees are made for the suitability of this code, blah blah blah
 
 BACKGROUND: newton.py contains the class Newton which can be used to find the roots of N-dimensional functions. It has a single non-standard dependency, functions.py, which contains a function for approximating the Jacobian of a function and a function for writing polynomials
 

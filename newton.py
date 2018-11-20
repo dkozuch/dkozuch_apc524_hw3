@@ -53,6 +53,10 @@ class Newton(object):
 				return x
 			x = self.step(x, fx)
 			
+			#check for NaN
+			if (np.isscalar(x) and np.isnan(x)) or (np.isscalar(x) and np.isnan(x).any()):
+				raise ValueError('Algorithm encountered a NaN value. Try using max_radius to bound your problem')
+			
 			if np.abs(np.linalg.norm(x-x0)) > self._max_radius:
 				raise ValueError('The algorithm made a step that exceeded the specified maximum radius (max_radius = '+str(self._max_radius)+'). Try changing dx, max_radius, or your intial guess..') 
 			
@@ -67,6 +71,8 @@ class Newton(object):
 		"""
 		if fx is None:
 			fx = self._f(x)
+			if np.isnan(fx):
+				raise ValueError("Initial condition returns NaN. Please choose a different intitial condition")
 
 		#allow the user to provide the functional form of the Jacobian as Df; if Df is set to zero, we approximate numerically
 		#because Df could be a scalar or a matrix, we have to test isscalar first
