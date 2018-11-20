@@ -12,7 +12,8 @@ DESCRIPTION: the Newton class contains three functions:
 		-- maxiter: sets the maximum number of steps the algorithm will take
 		-- dx: sets the distance over which to approximate the numerical Jacobian
 		-- max_radius: sets a cutoff distance from the intial guess to search for the root
-		-- Df: optional analytic function for the Jacobian, if set to zero (default) the algorithm with numerically approximate the Jacobian
+		-- Df: optional analytic function for the Jacobian.
+		       If set to zero (default) the algorithm will numerically approximate the Jacobian
 
 	-- Newton.solve
 	This function takes one argument, x0, as the intial guess for the solver
