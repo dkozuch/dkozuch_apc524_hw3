@@ -7,7 +7,12 @@ DESCRIPTION: the Newton class contains three functions:
 
 	-- Newton.__init__
 	This function initalizes the class and requires one argument, f, the function for which the roots will be solved
-	Optional arguments tol, maxiter, dx, max_radius, and Df are described in file
+	Optional arguments tol, maxiter, dx, max_radius, and Df are as follows:
+		-- tol: sets the convergence criteria for the solution
+		-- maxiter: sets the maximum number of steps the algorithm will take
+		-- dx: sets the distance over which to approximate the numerical Jacobian
+		-- max_radius: sets a cutoff distance from the intial guess to search for the root
+		-- Df: optional analytic function for the Jacobian
 
 	-- Newton.solve
 	This function takes one argument, x0, as the intial guess for the solver
